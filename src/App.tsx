@@ -20,6 +20,12 @@ function App() {
                 </RequireAuth>
             } />
 
+            <Route path='/challenge-takeoff-redux-ts/' element={
+                <RequireAuth>
+                    <HomePage />
+                </RequireAuth>
+            } />
+
             <Route path='/login' element={<LoginPage />} />
 
             <Route path='/register' element={<RegisterPage />} />
