@@ -1,6 +1,7 @@
 import {Link} from "react-router-dom";
+import {FC} from "react";
 
-const NotFound = () => {
+const NotFound: FC = () => {
     return(
         <div>
             <h1>NotFound</h1>

@@ -1,5 +1,6 @@
 import {Link, useLocation} from "react-router-dom";
 import Login from "../components/login/Login";
+import {FC} from "react";
 
 type LocationState = {
     from: {
@@ -7,7 +8,7 @@ type LocationState = {
     }
 }
 
-const LoginPage = () => {
+const LoginPage: FC = () => {
     const location = useLocation()
 
     const { from } = location?.state as LocationState || '/';

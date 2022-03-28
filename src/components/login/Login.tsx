@@ -3,8 +3,9 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import {setUser} from "../../store/slices/userSlice";
 import Form from "../form/Form";
 import {useAppDispatch} from "../../hooks/redux-hooks";
+import {FC} from "react";
 
-const Login = () => {
+const Login: FC = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 

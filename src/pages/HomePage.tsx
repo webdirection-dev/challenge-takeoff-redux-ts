@@ -1,25 +1,41 @@
-import {useEffect} from "react";
+import React, {FC, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../hooks/redux-hooks";
 
-import {removeUser, getUsers, deleteUsers, changeUsers, addNewUsers} from "../store/slices/userSlice";
+import {removeUser, getUsers, toggleModalAddUser} from "../store/slices/userSlice";
 import {useAuth} from "../hooks/use-auth";
 
-const HomePage = () => {
+import {Container, Button, Fab} from '@mui/material';
+import {Add} from '@mui/icons-material';
+
+import Search from "../components/Search";
+import UsersList from "../components/usersList";
+import NewUser from "../components/newUser";
+import ChangeUser from "../components/changeUser";
+
+const HomePage: FC = () => {
     const {email} = useAuth()
     const dispatch = useAppDispatch()
-    const {users, status, error} = useAppSelector(state => state.userReducer)
+    const {status, error} = useAppSelector(state => state.userReducer)
 
     useEffect(() => {
         dispatch(getUsers())
     }, [dispatch])
 
     return(
-        <div>
+        <Container
+            sx={{
+                position: 'relative',
+                mt: '1rem',
+            }}
+        >
+            <Search />
+
             <h1>Welcome {email}!</h1>
 
-            <button
+            <Button
+                variant="outlined"
                 onClick={() => dispatch(removeUser())}
-            >Log out from {email}</button>
+            >Log out from {email}</Button>
 
             {
                 status === 'loading' && <h2>Loading...</h2>
@@ -29,30 +45,24 @@ const HomePage = () => {
                 status === 'error' && <h2>An error occurred: {error}</h2>
             }
 
-            <ul>
-                {
-                    users.map(i => {
-                        return (
-                            <li key={`${i.id}${i.email}`}>
-                                {i.name}
+            <UsersList />
 
-                                <button
-                                    onClick={() => dispatch(changeUsers(i.id))}
-                                >Change</button>
+            <NewUser />
+            <ChangeUser />
 
-                                <button
-                                    onClick={() => dispatch(deleteUsers(i.id))}
-                                >Delete</button>
-                            </li>
-                        )
-                    })
-                }
-            </ul>
-
-            <button
-                onClick={() => dispatch(addNewUsers('New User'))}
-            >Add User</button>
-        </div>
+            <Fab
+                color="primary"
+                aria-label="add"
+                onClick={() => dispatch(toggleModalAddUser())}
+                sx={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '50px',
+                }}
+            >
+                <Add />
+            </Fab>
+        </Container>
     )
 }
 

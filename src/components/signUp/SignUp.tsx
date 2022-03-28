@@ -1,10 +1,11 @@
+import {FC} from "react";
 import {useNavigate} from "react-router-dom";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import {setUser} from "../../store/slices/userSlice";
 import Form from "../form/Form";
 import {useAppDispatch} from "../../hooks/redux-hooks";
 
-const SignUp = () => {
+const SignUp: FC = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 

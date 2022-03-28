@@ -8,11 +8,24 @@ interface IState {
     status: string,
     error: unknown,
 
-    users: {id: number | null, name: string, email: string, website: string}[]
+    users: {id: number | null, name: string, email: string, website: string}[],
+
+    idForChangeUser: number,
+
+    modalAddUser: boolean,
+    modalChangeUser: boolean,
 }
 
 interface IUsers {
     id: null | number;
+    name: string;
+    email: string;
+    website: string;
+}
+
+interface IEditUsers {
+    id: number;
+    idNewUser?: number;
     name: string;
     email: string;
     website: string;
@@ -26,7 +39,11 @@ const initialState: IState = {
     status: '',
     error: {},
 
-    users: []
+    users: [],
+
+    idForChangeUser: 0,
+    modalAddUser: false,
+    modalChangeUser: false,
 }
 
 const PATH = 'https://jsonplaceholder.typicode.com/users/'
@@ -35,7 +52,7 @@ export const getUsers = createAsyncThunk(
     'user/getUsers',
     async function (_, {rejectWithValue}) {
         try {
-            const response = await fetch(PATH)
+            const response = await fetch(PATH+'?_limit=5')
 
             if (!response.ok) throw new Error('Server Error!')
 
@@ -77,25 +94,27 @@ export const deleteUsers = createAsyncThunk(
 
 export const changeUsers = createAsyncThunk(
     'user/changeUsers',
-    async function (id: number | null, {rejectWithValue, dispatch, getState}) {
+    async function (editUser: IEditUsers, {rejectWithValue, dispatch, getState}) {
         const state = getState() as {userReducer: {users: {id: number}[]}}
-        const user = state.userReducer.users.find(i => i.id === id)
+
         try {
-            const response = await fetch(`${PATH}${id}`, {
+            const response = await fetch(`${PATH}${editUser.id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name: 'string',
-                    email: 'string',
-                    website: 'string',
+                    name: editUser.name,
+                    email: editUser.email,
+                    website: editUser.website,
                 })
             })
 
             if (!response.ok) throw new Error('Can not change user.')
 
-            dispatch(changeUserFromTable({id}))
+            const data = await response.json()
+
+            dispatch(changeUserFromTable(data))
         }
 
         catch (error) {
@@ -125,7 +144,8 @@ export const addNewUsers = createAsyncThunk(
 
             if (!response.ok) throw new Error('Can not add user.')
 
-            const data: {is: number, name: string, email: string} = await response.json()
+            const data: {id: number, name: string, email: string} = await response.json()
+            console.log(data)
 
             dispatch(addUserFromTable(data))
         }
@@ -160,13 +180,30 @@ const userSlice = createSlice({
         },
 
         changeUserFromTable(state, action) {
-            const changeUser = state.users.find(i => i.id === action.payload.id)
-            if (changeUser) changeUser.name = 'ttteeesssttt'
+            const {id, name, email, website} = action.payload
+            const changeUser = state.users.find(i => i.id === id)
+            if (changeUser) {
+                changeUser.id = id
+                changeUser.email = email
+                changeUser.name = name
+                changeUser.website = website
+            }
         },
 
         addUserFromTable(state, action) {
-            console.log(action.payload)
             state.users.push(action.payload)
+        },
+
+        toggleModalAddUser(state) {
+            state.modalAddUser = !state.modalAddUser
+        },
+
+        toggleModalChangeUser(state) {
+            state.modalChangeUser = !state.modalChangeUser
+        },
+
+        setIdForChangeUser(state, action) {
+            state.idForChangeUser = action.payload
         },
     },
 
@@ -205,6 +242,17 @@ const userSlice = createSlice({
     }
 })
 
-export const {setUser, removeUser, removeUserFromTable, changeUserFromTable, addUserFromTable} = userSlice.actions
+export const {
+    setUser,
+    removeUser,
+    removeUserFromTable,
+    changeUserFromTable,
+    addUserFromTable,
+
+    setIdForChangeUser,
+
+    toggleModalAddUser,
+    toggleModalChangeUser,
+} = userSlice.actions
 
 export default userSlice.reducer

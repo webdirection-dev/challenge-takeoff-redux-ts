@@ -12,6 +12,7 @@
       <list>
         <option value="JavaScript File" />
         <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
       </list>
     </option>
   </component>
@@ -66,7 +67,10 @@
       <workItem from="1647896257076" duration="272000" />
       <workItem from="1648129587808" duration="22585000" />
       <workItem from="1648156217787" duration="151000" />
-      <workItem from="1648156637200" duration="9149000" />
+      <workItem from="1648156637200" duration="9577000" />
+      <workItem from="1648473475581" duration="17240000" />
+      <workItem from="1648495325899" duration="202000" />
+      <workItem from="1648495566854" duration="13146000" />
     </task>
     <servers />
   </component>

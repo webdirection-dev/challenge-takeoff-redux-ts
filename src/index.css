@@ -1,13 +1,27 @@
-* {
-  box-sizing: border-box;
+/** {*/
+/*  box-sizing: border-box;*/
+/*  margin: 0;*/
+/*  padding: 0;*/
+/*}*/
+
+html {
+  font-family: "Roboto", serif;
+}
+
+body {
   margin: 0;
   padding: 0;
 }
 
-body {
-  padding: 2rem;
-}
-
 li {
   list-style-type: none;
+}
+
+.header__title {
+  color: inherit;
+  text-decoration: none
+}
+
+.MuiTableRow-hover:hover {
+  background-color: #90caf9 !important;
 }
