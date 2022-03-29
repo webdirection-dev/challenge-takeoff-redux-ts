@@ -31,6 +31,7 @@ const UsersList: FC = () => {
                         <StyledTableCell align="center">Name</StyledTableCell>
                         <StyledTableCell align="center">Email</StyledTableCell>
                         <StyledTableCell align="center">Website</StyledTableCell>
+                        <StyledTableCell align="center">Phone</StyledTableCell>
                         <StyledTableCell align="center">Action</StyledTableCell>
                     </TableRow>
                 </TableHead>

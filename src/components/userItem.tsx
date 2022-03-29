@@ -1,5 +1,6 @@
 import React, {FC} from "react";
-import {toggleModalChangeUser, deleteUsers, setIdForChangeUser} from "../store/slices/userSlice";
+import {toggleModalChangeUser, setIdForChangeUser} from "../store/slices/userSlice";
+// import {toggleModalChangeUser, deleteUsers, setIdForChangeUser} from "../store/slices/userSlice";
 import {useAppDispatch} from "../hooks/redux-hooks";
 import {TableCell, TableRow, Box, IconButton} from "@mui/material";
 import {DriveFileRenameOutline, DeleteOutline} from '@mui/icons-material';
@@ -11,6 +12,7 @@ interface IProps {
     name: string,
     email: string,
     website: string,
+    phone: string,
 }
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -32,19 +34,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const UserItem: FC<IProps> = ({id, name, email, website}) => {
+const UserItem: FC<IProps> = ({id, name, email, website, phone}) => {
     const dispatch = useAppDispatch()
 
     return(
         <StyledTableRow
-            key={`${id}${email}`}
+            key={id}
             hover
-            sx={{cursor: 'pointer'}}
         >
             <StyledTableCell component="th" scope="row">{id}</StyledTableCell>
             <StyledTableCell align="center">{name}</StyledTableCell>
             <StyledTableCell align="center">{email}</StyledTableCell>
             <StyledTableCell align="center">{website}</StyledTableCell>
+            <StyledTableCell align="center">{phone}</StyledTableCell>
             <StyledTableCell align="center">
                 <Box>
                     <IconButton
@@ -58,7 +60,7 @@ const UserItem: FC<IProps> = ({id, name, email, website}) => {
                     </IconButton>
 
                     <IconButton
-                        onClick={() => dispatch(deleteUsers(id))}
+                        // onClick={() => dispatch(deleteUsers(id))}
                         sx={{ml: '1rem'}}
                         color="error"
                     >
