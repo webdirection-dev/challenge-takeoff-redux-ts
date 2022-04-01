@@ -1,6 +1,5 @@
 import React, {FC} from "react";
-import {toggleModalChangeUser, setIdForChangeUser} from "../store/slices/userSlice";
-// import {toggleModalChangeUser, deleteUsers, setIdForChangeUser} from "../store/slices/userSlice";
+import {toggleModalChangeUser, setIdForChangeUser, removeUserFromTable} from "../store/slices/userSlice";
 import {useAppDispatch} from "../hooks/redux-hooks";
 import {TableCell, TableRow, Box, IconButton} from "@mui/material";
 import {DriveFileRenameOutline, DeleteOutline} from '@mui/icons-material';
@@ -60,7 +59,7 @@ const UserItem: FC<IProps> = ({id, name, email, website, phone}) => {
                     </IconButton>
 
                     <IconButton
-                        // onClick={() => dispatch(deleteUsers(id))}
+                        onClick={() => dispatch(removeUserFromTable(id))}
                         sx={{ml: '1rem'}}
                         color="error"
                     >

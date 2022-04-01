@@ -1,9 +1,33 @@
-import {FC} from "react";
+import React, {FC} from "react";
 import {Link} from 'react-router-dom'
 import {AppBar, Toolbar, IconButton, Typography, Button, Box} from '@mui/material';
 import {Menu} from '@mui/icons-material';
+import {removeUser} from "../../store/slices/userSlice";
+import {useAuth} from "../../hooks/use-auth";
+import {useAppDispatch} from "../../hooks/redux-hooks";
 
 const Header: FC = () => {
+    const {email} = useAuth()
+    const dispatch = useAppDispatch()
+
+    const Btn = () => {
+        // if (!!email) {
+        if (true) {
+            return (
+                <Button
+                    color="inherit"
+                    onClick={() => dispatch(removeUser())}
+                >Log out from {email}</Button>
+            )
+        }
+
+        return (
+            <Button
+                color="inherit"
+            >login</Button>
+        )
+    }
+
     return(
         <AppBar position='static'>
             <Toolbar>
@@ -29,9 +53,7 @@ const Header: FC = () => {
                     </Link>
                 </Box>
 
-                <Button
-                    color="inherit"
-                >login</Button>
+                <Btn />
             </Toolbar>
         </AppBar>
     )

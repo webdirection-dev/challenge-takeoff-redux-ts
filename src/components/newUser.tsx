@@ -8,12 +8,15 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    TextField
+    TextField,
 } from "@mui/material";
+
+import SuccessAlert from "./alerts/successAlert";
 
 const NewUser: FC = () => {
     const dispatch = useAppDispatch()
     const {modalAddUser} = useAppSelector(state => state.userReducer)
+    const [openAlert, setOpenAlert] = useState(false);
     const [newUser, setNewUser] = useState({
         name: 'empty',
         email: 'empty',
@@ -21,7 +24,7 @@ const NewUser: FC = () => {
         phone: 'empty'
     })
 
-    const handelNewUser: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
+    const handleNewUser: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
         e.preventDefault()
         const {id, value} = e.target
         setNewUser({
@@ -31,78 +34,82 @@ const NewUser: FC = () => {
     }
 
     return(
-        <Dialog open={modalAddUser}>
-            <DialogTitle>Add User</DialogTitle>
+        <>
+            <Dialog open={modalAddUser}>
+                <DialogTitle>Add New user</DialogTitle>
 
-            <DialogContent>
-                <DialogContentText>
-                    Here you can add user data. Since this is not a commercial project, the entered data is not validated or verified.
-                </DialogContentText>
+                <DialogContent>
+                    <DialogContentText>
+                        Here you can add user data. Since this is not a commercial project, the entered data is not validated or verified.
+                    </DialogContentText>
 
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    label="Name"
-                    type="search"
-                    fullWidth
-                    variant="standard"
-                    onChange={e => handelNewUser(e)}
-                />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Name"
+                        type="search"
+                        fullWidth
+                        variant="standard"
+                        onChange={e => handleNewUser(e)}
+                    />
 
-                <TextField
-                    margin="dense"
-                    id="email"
-                    label="Email Address"
-                    type="email"
-                    fullWidth
-                    variant="standard"
-                    onChange={e => handelNewUser(e)}
-                />
-            </DialogContent>
+                    <TextField
+                        margin="dense"
+                        id="email"
+                        label="Email Address"
+                        type="email"
+                        fullWidth
+                        variant="standard"
+                        onChange={e => handleNewUser(e)}
+                    />
 
-            <DialogActions>
-                <Button onClick={() => dispatch(toggleModalAddUser())}>Cancel</Button>
+                    <TextField
+                        margin="dense"
+                        id="website"
+                        label="Website"
+                        type="search"
+                        fullWidth
+                        variant="standard"
+                        onChange={e => handleNewUser(e)}
+                    />
 
-                <Button onClick={() => {
-                    dispatch(addUsers(newUser))
-                    dispatch(toggleModalAddUser())
-                    setNewUser({
-                        name: 'empty',
-                        email: 'empty',
-                        website: 'empty',
-                        phone: 'empty'
-                    })
-                }}>Add</Button>
-            </DialogActions>
-        </Dialog>
+                    <TextField
+                        margin="dense"
+                        id="phone"
+                        label="Phone"
+                        type="tel"
+                        fullWidth
+                        variant="standard"
+                        onChange={e => handleNewUser(e)}
+                    />
+                </DialogContent>
+
+                <DialogActions>
+                    <Button onClick={() => dispatch(toggleModalAddUser())}>Cancel</Button>
+
+                    <Button onClick={() => {
+                        dispatch(addUsers(newUser))
+                        dispatch(toggleModalAddUser())
+                        setNewUser({
+                            name: 'empty',
+                            email: 'empty',
+                            website: 'empty',
+                            phone: 'empty'
+                        })
+                        setOpenAlert(true)
+                    }}>Add</Button>
+                </DialogActions>
+            </Dialog>
+
+            <SuccessAlert
+                openAlert={openAlert}
+                setOpenAlert={setOpenAlert}
+                alertType='success'
+                text='New user has been added!'
+            />
+        </>
     )
 }
 
 export default NewUser
-
-
-// import React, {FC} from "react";
-// import {toggleModalAddUser} from "../store/slices/userSlice";
-// // import {addNewUsers, toggleModalAddUser} from "../store/slices/userSlice";
-// import {useAppDispatch, useAppSelector} from "../hooks/redux-hooks";
-// import {Modal} from "@mui/material";
-//
-// const NewUser: FC = () => {
-//     const dispatch = useAppDispatch()
-//     const {modalAddUser} = useAppSelector(state => state.userReducer)
-//
-//     return(
-//         <Modal
-//             open={modalAddUser}
-//             onClose={() => dispatch(toggleModalAddUser())}
-//             aria-labelledby="modal-modal-title"
-//             aria-describedby="modal-modal-description"
-//             // onClick={() => dispatch(addNewUsers('New User'))}
-//         >
-//             <h1>test</h1>
-//         </Modal>
-//     )
-// }
-//
-// export default NewUser

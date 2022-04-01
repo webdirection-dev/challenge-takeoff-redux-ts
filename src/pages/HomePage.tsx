@@ -1,8 +1,7 @@
-import React, {FC, useEffect} from "react";
-import {useAppDispatch, useAppSelector} from "../hooks/redux-hooks";
+import React, {FC} from "react";
+import {useAppDispatch} from "../hooks/redux-hooks";
 
 import {removeUser, toggleModalAddUser} from "../store/slices/userSlice";
-// import {removeUser, getUsers, toggleModalAddUser} from "../store/slices/userSlice";
 import {useAuth} from "../hooks/use-auth";
 
 import {Container, Button, Fab} from '@mui/material';
@@ -16,11 +15,6 @@ import ChangeUser from "../components/changeUser";
 const HomePage: FC = () => {
     const {email} = useAuth()
     const dispatch = useAppDispatch()
-    // const {status, error} = useAppSelector(state => state.userReducer)
-    //
-    // useEffect(() => {
-    //     dispatch(getUsers())
-    // }, [dispatch])
 
     return(
         <Container
@@ -37,14 +31,6 @@ const HomePage: FC = () => {
                 variant="outlined"
                 onClick={() => dispatch(removeUser())}
             >Log out from {email}</Button>
-
-            {/*{*/}
-            {/*    status === 'loading' && <h2>Loading...</h2>*/}
-            {/*}*/}
-
-            {/*{*/}
-            {/*    status === 'error' && <h2>An error occurred: {error}</h2>*/}
-            {/*}*/}
 
             <UsersList />
 

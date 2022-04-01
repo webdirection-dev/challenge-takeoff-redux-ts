@@ -1,6 +1,5 @@
-import React, {FC, useEffect, useState} from "react";
-import {toggleModalChangeUser} from "../store/slices/userSlice";
-// import {changeUsers, toggleModalChangeUser} from "../store/slices/userSlice";
+import React, {ChangeEventHandler, FC, useEffect, useState} from "react";
+import {changeUserFromTable, toggleModalChangeUser} from "../store/slices/userSlice";
 import {useAppDispatch, useAppSelector} from "../hooks/redux-hooks";
 
 import {
@@ -12,129 +11,119 @@ import {
     DialogContentText,
     DialogTitle
 } from '@mui/material';
+import SuccessAlert from "./alerts/successAlert";
 
 const ChangeUser: FC = () => {
     const dispatch = useAppDispatch()
-    const {modalChangeUser, idForChangeUser} = useAppSelector(state => state.userReducer)
+    const {modalChangeUser, idForChangeUser, users} = useAppSelector(state => state.userReducer)
+    const [openAlert, setOpenAlert] = useState(false);
     const [editUser, setEditUser] = useState({
         id: idForChangeUser,
         name: '',
         email: '',
         website: '',
+        phone: ''
     })
 
-    useEffect(() => {
+    const handleNewUser: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
+        e.preventDefault()
+        const {name, value} = e.target
         setEditUser({
+            ...editUser,
             id: idForChangeUser,
-            name: 'Some',
-            email: 'Some',
-            website: 'Some',
+            [name]: value,
         })
-    }, [idForChangeUser])
+    }
 
+    const checkChange = () => {
+        for (let objKey in editUser) {
+            let key = objKey as keyof typeof editUser
+            if (key !== 'id' && editUser[key] !== '') {
+                setOpenAlert(true)
+                editUser[key] = ''
+            }
+        }
+    }
+
+    const nameUser = (idForChangeUser && idForChangeUser > 0) ? users[idForChangeUser -1].name : ''
     return(
-        <Dialog
-            open={modalChangeUser}
-            onClose={() => dispatch(toggleModalChangeUser())}
-        >
-            <DialogTitle>Edit User</DialogTitle>
+        <>
+            <Dialog
+                open={modalChangeUser}
+                onClose={() => dispatch(toggleModalChangeUser())}
+            >
+                <DialogTitle>Edit {nameUser}</DialogTitle>
 
-            <DialogContent>
-                <DialogContentText>
-                    Here you can edit user data. Since this is not a commercial project, the entered data is not validated or verified.
-                </DialogContentText>
+                <DialogContent>
+                    <DialogContentText>
+                        Here you can edit user data. Since this is not a commercial project, the entered data is not validated or verified.
+                    </DialogContentText>
 
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    label="Email Address"
-                    type="email"
-                    fullWidth
-                    variant="standard"
-                />
-            </DialogContent>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        name="name"
+                        label="Name"
+                        type="search"
+                        fullWidth
+                        variant="standard"
+                        onChange={e => handleNewUser(e)}
+                    />
 
-            <DialogActions>
-                <Button onClick={() => dispatch(toggleModalChangeUser())}>Cancel</Button>
+                    <TextField
+                        margin="dense"
+                        id="email"
+                        name="email"
+                        label="Email Address"
+                        type="email"
+                        fullWidth
+                        variant="standard"
+                        onChange={e => handleNewUser(e)}
+                    />
 
-                <Button onClick={() => {
-                    // dispatch(changeUsers(editUser))
-                    dispatch(toggleModalChangeUser())
-                }}>Edit</Button>
-            </DialogActions>
-        </Dialog>
+                    <TextField
+                        margin="dense"
+                        id="website"
+                        name="website"
+                        label="Website"
+                        type="search"
+                        fullWidth
+                        variant="standard"
+                        onChange={e => handleNewUser(e)}
+                    />
+
+                    <TextField
+                        margin="dense"
+                        id="phone"
+                        name="phone"
+                        label="Phone"
+                        type="tel"
+                        fullWidth
+                        variant="standard"
+                        onChange={e => handleNewUser(e)}
+                    />
+                </DialogContent>
+
+                <DialogActions>
+                    <Button onClick={() => dispatch(toggleModalChangeUser())}>Cancel</Button>
+
+                    <Button onClick={() => {
+                        dispatch(changeUserFromTable(editUser))
+                        dispatch(toggleModalChangeUser())
+                        checkChange()
+                    }}>Edit</Button>
+                </DialogActions>
+            </Dialog>
+
+            <SuccessAlert
+                openAlert={openAlert}
+                setOpenAlert={setOpenAlert}
+                alertType='success'
+                text='User data has been changed'
+            />
+        </>
     )
 }
 
 export default ChangeUser
-
-// import React, {FC, useEffect, useState} from "react";
-// import {changeUsers, toggleModalChangeUser} from "../store/slices/userSlice";
-// import {useAppDispatch, useAppSelector} from "../hooks/redux-hooks";
-//
-// import {
-//     Button,
-//     TextField,
-//     Dialog,
-//     DialogActions,
-//     DialogContent,
-//     DialogContentText,
-//     DialogTitle
-// } from '@mui/material';
-//
-// const ChangeUser: FC = () => {
-//     const dispatch = useAppDispatch()
-//     const {modalChangeUser, idForChangeUser} = useAppSelector(state => state.userReducer)
-//     const [editUser, setEditUser] = useState({
-//         id: idForChangeUser,
-//         name: '',
-//         email: '',
-//         website: '',
-//     })
-//
-//     useEffect(() => {
-//         setEditUser({
-//             id: idForChangeUser,
-//             name: 'Some',
-//             email: 'Some',
-//             website: 'Some',
-//         })
-//     }, [idForChangeUser])
-//
-//     return(
-//         <Dialog
-//             open={modalChangeUser}
-//             onClose={() => dispatch(toggleModalChangeUser())}
-//         >
-//             <DialogTitle>Edit User</DialogTitle>
-//
-//             <DialogContent>
-//                 <DialogContentText>
-//                     Here you can edit user data. Since this is not a commercial project, the entered data is not validated or verified.
-//                 </DialogContentText>
-//
-//                 <TextField
-//                     autoFocus
-//                     margin="dense"
-//                     id="name"
-//                     label="Email Address"
-//                     type="email"
-//                     fullWidth
-//                     variant="standard"
-//                 />
-//             </DialogContent>
-//
-//             <DialogActions>
-//                 <Button onClick={() => dispatch(toggleModalChangeUser())}>Cancel</Button>
-//
-//                 <Button onClick={() => {
-//                     dispatch(changeUsers(editUser))
-//                     dispatch(toggleModalChangeUser())
-//                 }}>Edit</Button>
-//             </DialogActions>
-//         </Dialog>
-//     )
-// }
-//
-// export default ChangeUser
