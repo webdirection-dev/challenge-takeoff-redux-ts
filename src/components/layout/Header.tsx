@@ -19,7 +19,7 @@ const Header: FC = () => {
                 <Button
                     color="inherit"
                     onClick={() => dispatch(removeUser())}
-                >Log out from</Button>
+                >Log out</Button>
             )
         }
 
