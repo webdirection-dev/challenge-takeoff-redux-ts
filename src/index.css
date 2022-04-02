@@ -25,3 +25,25 @@ li {
 .MuiTableRow-hover:hover {
   background-color: #90caf9 !important;
 }
+
+.variant__mark {
+  color: dodgerblue;
+}
+
+.header__link {
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.btn__add {
+  position: fixed !important;
+  bottom: 20px;
+  right: 50px;
+}
+
+@media (max-width: 768px) {
+  .btn__add {
+    position: unset !important;
+  }
+}

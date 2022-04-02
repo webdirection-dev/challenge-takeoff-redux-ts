@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import {Link} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import {AppBar, Toolbar, IconButton, Typography, Button, Box} from '@mui/material';
 import {Menu} from '@mui/icons-material';
 import {removeUser} from "../../store/slices/userSlice";
@@ -9,23 +9,41 @@ import {useAppDispatch} from "../../hooks/redux-hooks";
 const Header: FC = () => {
     const {email} = useAuth()
     const dispatch = useAppDispatch()
+    const location = useLocation()
+
+    const isUser = !!email
 
     const Btn = () => {
-        // if (!!email) {
-        if (true) {
+        if (isUser) {
             return (
                 <Button
                     color="inherit"
                     onClick={() => dispatch(removeUser())}
-                >Log out from {email}</Button>
+                >Log out from</Button>
             )
         }
 
-        return (
-            <Button
-                color="inherit"
-            >login</Button>
-        )
+        if (!isUser) {
+            if (location.pathname === '/register') {
+                return (
+                    <Link
+                        className='header__link'
+                        to='/login'
+                    >login</Link>
+                )
+            }
+
+            if (location.pathname === '/login') {
+                return (
+                    <Link
+                        to='/register'
+                        className='header__link'
+                    >Sing up</Link>
+                )
+            }
+        }
+
+        return null
     }
 
     return(

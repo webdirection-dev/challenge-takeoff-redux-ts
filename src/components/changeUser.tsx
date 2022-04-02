@@ -1,4 +1,4 @@
-import React, {ChangeEventHandler, FC, useEffect, useState} from "react";
+import React, {ChangeEventHandler, FC, ChangeEvent, useEffect, useState} from "react";
 import {changeUserFromTable, toggleModalChangeUser} from "../store/slices/userSlice";
 import {useAppDispatch, useAppSelector} from "../hooks/redux-hooks";
 
@@ -11,7 +11,16 @@ import {
     DialogContentText,
     DialogTitle
 } from '@mui/material';
+
 import SuccessAlert from "./alerts/successAlert";
+
+interface IUser {
+    id: number | null,
+    name: string;
+    email: string;
+    website: string;
+    phone: string;
+}
 
 const ChangeUser: FC = () => {
     const dispatch = useAppDispatch()
@@ -25,15 +34,41 @@ const ChangeUser: FC = () => {
         website: '',
         phone: ''
     })
+    const [placeholder, setPlaceholder] = useState<IUser>({
+        id: 0,
+        name: '',
+        email: '',
+        website: '',
+        phone: ''
+    })
 
     useEffect(() => {
         const user = users.filter(i => i.id === idForChangeUser)
-        if (user.length > 0) setName(user[0].name)
+        if (user.length > 0) {
+            setName(user[0].name)
+            setPlaceholder(user[0])
+        }
     }, [idForChangeUser, users])
 
-    const handleNewUser: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
+    const handleNewUser: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e): void => {
         e.preventDefault()
         const {name, value} = e.target
+        setEditUser({
+            ...editUser,
+            id: idForChangeUser,
+            [name]: value,
+        })
+    }
+
+    const handlePlaceholder:  ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e): void => {
+        e.preventDefault()
+        const {name, value} = e.target
+
+        setEditUser({
+            ...editUser,
+            [name]: value,
+        })
+
         setEditUser({
             ...editUser,
             id: idForChangeUser,
@@ -73,7 +108,11 @@ const ChangeUser: FC = () => {
                         type="search"
                         fullWidth
                         variant="standard"
-                        onChange={e => handleNewUser(e)}
+                        defaultValue={placeholder.name}
+                        onChange={e => {
+                            handleNewUser(e)
+                            handlePlaceholder(e)
+                        }}
                     />
 
                     <TextField
@@ -84,7 +123,11 @@ const ChangeUser: FC = () => {
                         type="email"
                         fullWidth
                         variant="standard"
-                        onChange={e => handleNewUser(e)}
+                        defaultValue={placeholder.email}
+                        onChange={e => {
+                            handleNewUser(e)
+                            handlePlaceholder(e)
+                        }}
                     />
 
                     <TextField
@@ -95,7 +138,11 @@ const ChangeUser: FC = () => {
                         type="search"
                         fullWidth
                         variant="standard"
-                        onChange={e => handleNewUser(e)}
+                        defaultValue={placeholder.website}
+                        onChange={e => {
+                            handleNewUser(e)
+                            handlePlaceholder(e)
+                        }}
                     />
 
                     <TextField
@@ -106,7 +153,11 @@ const ChangeUser: FC = () => {
                         type="tel"
                         fullWidth
                         variant="standard"
-                        onChange={e => handleNewUser(e)}
+                        defaultValue={placeholder.phone}
+                        onChange={e => {
+                            handleNewUser(e)
+                            handlePlaceholder(e)
+                        }}
                     />
                 </DialogContent>
 
@@ -124,7 +175,7 @@ const ChangeUser: FC = () => {
             <SuccessAlert
                 openAlert={openAlert}
                 setOpenAlert={setOpenAlert}
-                alertType='success'
+                alertType='warning'
                 text='User data has been changed'
             />
         </>

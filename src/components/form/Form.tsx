@@ -1,4 +1,5 @@
-import {FC, useState} from "react";
+import React, {FC, useState} from "react";
+import {TextField, Box, Button} from "@mui/material";
 
 interface IProps {
     title: string,
@@ -10,25 +11,48 @@ const Form: FC<IProps> = ({title, handleClick}) => {
     const [password, setPassword] = useState('')
 
     return(
-        <div>
-            <input
+        <Box
+            sx={{
+                margin: '0 auto',
+                width: '50%',
+            }}
+        >
+            <TextField
+                // autoFocus
+                margin="dense"
+                id="email"
+                name="email"
+                label="Email"
                 type="email"
-                placeholder='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                fullWidth
+                variant="standard"
+                onChange={e => setEmail(e.target.value)}
             />
 
-            <input
+            <TextField
+                margin="dense"
+                id="password"
+                name="password"
+                label="Password"
                 type="password"
-                placeholder='password'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+                variant="standard"
+                onChange={e => setPassword(e.target.value)}
             />
 
-            <button
-                onClick={() => handleClick(email, password)}
-            >{title}</button>
-        </div>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignContent: 'center',
+                    mt: 3,
+                }}
+            >
+                <Button
+                    variant="contained"
+                    onClick={() => handleClick(email, password)}
+                >{title}</Button>
+            </Box>
+        </Box>
     )
 }
 

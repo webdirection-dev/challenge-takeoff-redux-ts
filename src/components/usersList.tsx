@@ -1,10 +1,11 @@
-import React, {FC} from "react";
+import React, {FC, useState} from "react";
 import {useAppSelector} from "../hooks/redux-hooks";
 import {Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody} from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell'
 import { styled } from '@mui/material/styles';
 
 import UserItem from "./userItem";
+import SuccessAlert from "./alerts/successAlert";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -17,35 +18,48 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const UsersList: FC = () => {
-    const {users} = useAppSelector(state => state.userReducer)
+    const {users, filteredUsers, input} = useAppSelector(state => state.userReducer)
+    const [openAlert, setOpenAlert] = useState(false);
+
+    const renderUser = (filteredUsers.length > 0 || input !== '' ) ? filteredUsers :users
 
     return(
-        <TableContainer
-            component={Paper}
-            sx={{m: '1.5rem 0'}}
-        >
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                <TableHead>
-                    <TableRow>
-                        <StyledTableCell >ID</StyledTableCell>
-                        <StyledTableCell align="center">Name</StyledTableCell>
-                        <StyledTableCell align="center">Email</StyledTableCell>
-                        <StyledTableCell align="center">Website</StyledTableCell>
-                        <StyledTableCell align="center">Phone</StyledTableCell>
-                        <StyledTableCell align="center">Action</StyledTableCell>
-                    </TableRow>
-                </TableHead>
+        <>
+            <TableContainer
+                component={Paper}
+                sx={{m: '1.5rem 0'}}
+            >
+                <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableCell >ID</StyledTableCell>
+                            <StyledTableCell align="center">Name</StyledTableCell>
+                            <StyledTableCell align="center">Email</StyledTableCell>
+                            <StyledTableCell align="center">Website</StyledTableCell>
+                            <StyledTableCell align="center">Phone</StyledTableCell>
+                            <StyledTableCell align="center">Action</StyledTableCell>
+                        </TableRow>
+                    </TableHead>
 
-                <TableBody>
-                    {users.map(item => (
-                        <UserItem
-                            key={`${item.id}${item.email}`}
-                            {...item}
-                        />
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                    <TableBody>
+                        {renderUser.map(item => (
+                            <UserItem
+                                key={`${item.id}${item.email}`}
+                                setOpenAlert={setOpenAlert}
+                                {...item}
+                            />
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
+            <SuccessAlert
+                openAlert={openAlert}
+                setOpenAlert={setOpenAlert}
+                alertType='error'
+                text='User removed!'
+            />
+        </>
     )
 }
 

@@ -1,6 +1,6 @@
-import React, {FC} from "react";
+import React, {FC, Dispatch, SetStateAction} from "react";
 import {toggleModalChangeUser, setIdForChangeUser, removeUserFromTable} from "../store/slices/userSlice";
-import {useAppDispatch} from "../hooks/redux-hooks";
+import {useAppDispatch, useAppSelector} from "../hooks/redux-hooks";
 import {TableCell, TableRow, Box, IconButton} from "@mui/material";
 import {DriveFileRenameOutline, DeleteOutline} from '@mui/icons-material';
 import {styled} from "@mui/material/styles";
@@ -12,6 +12,7 @@ interface IProps {
     email: string,
     website: string,
     phone: string,
+    setOpenAlert: Dispatch<SetStateAction<boolean>>
 }
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -33,8 +34,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const UserItem: FC<IProps> = ({id, name, email, website, phone}) => {
+const UserItem: FC<IProps> = ({id, name, email, website, phone, setOpenAlert}) => {
     const dispatch = useAppDispatch()
+    const {input} = useAppSelector(state => state.userReducer)
 
     return(
         <StyledTableRow
@@ -42,10 +44,10 @@ const UserItem: FC<IProps> = ({id, name, email, website, phone}) => {
             hover
         >
             <StyledTableCell component="th" scope="row">{id}</StyledTableCell>
-            <StyledTableCell align="center">{name}</StyledTableCell>
-            <StyledTableCell align="center">{email}</StyledTableCell>
-            <StyledTableCell align="center">{website}</StyledTableCell>
-            <StyledTableCell align="center">{phone}</StyledTableCell>
+            <StyledTableCell align="center">{markLetters(name, input)}</StyledTableCell>
+            <StyledTableCell align="center">{markLetters(email, input)}</StyledTableCell>
+            <StyledTableCell align="center">{markLetters(website, input)}</StyledTableCell>
+            <StyledTableCell align="center">{markLetters(phone, input)}</StyledTableCell>
             <StyledTableCell align="center">
                 <Box>
                     <IconButton
@@ -59,7 +61,10 @@ const UserItem: FC<IProps> = ({id, name, email, website, phone}) => {
                     </IconButton>
 
                     <IconButton
-                        onClick={() => dispatch(removeUserFromTable(id))}
+                        onClick={() => {
+                            dispatch(removeUserFromTable(id))
+                            setOpenAlert(true)
+                        }}
                         sx={{ml: '1rem'}}
                         color="error"
                     >
@@ -72,3 +77,23 @@ const UserItem: FC<IProps> = ({id, name, email, website, phone}) => {
 }
 
 export default UserItem
+
+//покрасить искомые символы в найденных словах
+const markLetters = (str: string, input: string) => {
+    const isIndexOf = str.toLowerCase().indexOf(input.toLowerCase())
+
+    if (isIndexOf >= 0) {
+        const start = str.slice(0, isIndexOf)
+        const body = str.slice(isIndexOf, isIndexOf+input.length)
+        const end = str.slice(isIndexOf+input.length)
+        return(
+            <>
+                {start}
+                <span className="variant__mark">
+                        {body}
+                    </span>
+                {end}
+            </>
+        )
+    } else return str
+}

@@ -6,8 +6,7 @@ interface IProps {
 }
 
 const RequireAuth = ({children}: IProps) => {
-    const isAuth = true
-    // const {isAuth} = useAuth()
+    const {isAuth} = useAuth()
     const location = useLocation()
 
     if (!isAuth) {

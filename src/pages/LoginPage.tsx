@@ -2,6 +2,8 @@ import {Link, useLocation} from "react-router-dom";
 import Login from "../components/login/Login";
 import {FC} from "react";
 
+import {Container} from '@mui/material';
+
 type LocationState = {
     from: {
         pathname: string;
@@ -15,14 +17,13 @@ const LoginPage: FC = () => {
     const path = from?.pathname || '/'
 
     return(
-        <div>
+        <Container>
             <h1>Login</h1>
-            {path}
+            {/*{path}*/}
+            <p>Or <Link to='/register'>register</Link></p>
 
             <Login />
-
-            <p>Or <Link to='/register'>register</Link></p>
-        </div>
+        </Container>
     )
 }
 

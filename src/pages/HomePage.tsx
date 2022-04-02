@@ -1,10 +1,10 @@
 import React, {FC} from "react";
 import {useAppDispatch} from "../hooks/redux-hooks";
 
-import {removeUser, toggleModalAddUser} from "../store/slices/userSlice";
+import {toggleModalAddUser} from "../store/slices/userSlice";
 import {useAuth} from "../hooks/use-auth";
 
-import {Container, Button, Fab} from '@mui/material';
+import {Container, Fab} from '@mui/material';
 import {Add} from '@mui/icons-material';
 
 import Search from "../components/Search";
@@ -27,11 +27,6 @@ const HomePage: FC = () => {
 
             <h1>Welcome {email}!</h1>
 
-            <Button
-                variant="outlined"
-                onClick={() => dispatch(removeUser())}
-            >Log out from {email}</Button>
-
             <UsersList />
 
             <NewUser />
@@ -40,12 +35,8 @@ const HomePage: FC = () => {
             <Fab
                 color="primary"
                 aria-label="add"
+                className='btn__add'
                 onClick={() => dispatch(toggleModalAddUser())}
-                sx={{
-                    position: 'fixed',
-                    bottom: '20px',
-                    right: '50px',
-                }}
             >
                 <Add />
             </Fab>
