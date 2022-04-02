@@ -54,8 +54,6 @@ const userSlice = createSlice({
 
         //table
         removeUserFromTable(state, action) {
-            console.log(action.payload)
-
             state.users = state.users.filter(i => {
                 return i.id !== action.payload
             })
@@ -92,10 +90,12 @@ const userSlice = createSlice({
         //add users
         addUsers(state, action) {
             state.idNewUser = state.idNewUser + 1
+
             state.users.push({
                 ...action.payload,
                 id: state.idNewUser
             })
+
         },
     },
 })

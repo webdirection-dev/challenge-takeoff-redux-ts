@@ -13,7 +13,7 @@ const SuccessAlert: FC<IProps> = ({openAlert, setOpenAlert, alertType, text}) =>
     return(
         <Snackbar
             open={openAlert}
-            autoHideDuration={6000}
+            autoHideDuration={4000}
             anchorOrigin={{vertical: 'top', horizontal: 'center'}}
             onClose={() => setOpenAlert(false)}
         >

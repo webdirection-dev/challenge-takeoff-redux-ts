@@ -15,7 +15,7 @@ import SuccessAlert from "./alerts/successAlert";
 
 const NewUser: FC = () => {
     const dispatch = useAppDispatch()
-    const {modalAddUser} = useAppSelector(state => state.userReducer)
+    const {modalAddUser, users} = useAppSelector(state => state.userReducer)
     const [openAlert, setOpenAlert] = useState(false);
     const [newUser, setNewUser] = useState({
         name: 'empty',

@@ -17,13 +17,19 @@ const ChangeUser: FC = () => {
     const dispatch = useAppDispatch()
     const {modalChangeUser, idForChangeUser, users} = useAppSelector(state => state.userReducer)
     const [openAlert, setOpenAlert] = useState(false);
+    const [name, setName] = useState('')
     const [editUser, setEditUser] = useState({
-        id: idForChangeUser,
+        id: 0,
         name: '',
         email: '',
         website: '',
         phone: ''
     })
+
+    useEffect(() => {
+        const user = users.filter(i => i.id === idForChangeUser)
+        if (user.length > 0) setName(user[0].name)
+    }, [idForChangeUser, users])
 
     const handleNewUser: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
         e.preventDefault()
@@ -45,14 +51,13 @@ const ChangeUser: FC = () => {
         }
     }
 
-    const nameUser = (idForChangeUser && idForChangeUser > 0) ? users[idForChangeUser -1].name : ''
     return(
         <>
             <Dialog
                 open={modalChangeUser}
                 onClose={() => dispatch(toggleModalChangeUser())}
             >
-                <DialogTitle>Edit {nameUser}</DialogTitle>
+                <DialogTitle>Edit {name}</DialogTitle>
 
                 <DialogContent>
                     <DialogContentText>
