@@ -1,7 +1,7 @@
-import {ChangeEventHandler, FC, useEffect, useState} from "react";
+import {ChangeEventHandler, FC, useState} from "react";
 import {TextField, InputAdornment} from '@mui/material';
 import {Search as SearchIcon} from '@mui/icons-material';
-import {useAppDispatch, useAppSelector} from "../hooks/redux-hooks";
+import {useAppDispatch} from "../hooks/redux-hooks";
 import {filterUsers} from "../store/slices/userSlice";
 
 const Search: FC = () => {

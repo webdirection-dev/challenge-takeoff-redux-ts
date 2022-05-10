@@ -1,5 +1,7 @@
-import React, {FC, useState} from "react";
-import {useAppSelector} from "../hooks/redux-hooks";
+import React, {FC, useEffect, useState} from "react";
+import {useAppSelector, useAppDispatch} from "../hooks/redux-hooks";
+import {cleanUp} from "../store/slices/userSlice";
+
 import {Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody} from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell'
 import { styled } from '@mui/material/styles';
@@ -18,10 +20,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const UsersList: FC = () => {
+    const dispatch = useAppDispatch()
     const {users, filteredUsers, input} = useAppSelector(state => state.userReducer)
     const [openAlert, setOpenAlert] = useState(false);
 
-    const renderUser = (filteredUsers.length > 0 || input !== '' ) ? filteredUsers :users
+    const renderUser = (filteredUsers.length > 0 || input !== '' ) ? filteredUsers : users
+
+    useEffect(() => {
+        dispatch(cleanUp())
+    }, [dispatch])
 
     return(
         <>

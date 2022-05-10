@@ -162,6 +162,13 @@ const userSlice = createSlice({
                 state.input = ''
             }
         },
+
+        cleanUp: (state) => {
+            state.filteredUsers = []
+            state.input = ''
+            state.modalAddUser = false
+            state.modalChangeUser = false
+        }
     },
 })
 
@@ -178,6 +185,8 @@ export const {
     changeUserFromTable,
     removeUserFromTable,
     filterUsers,
+
+    cleanUp,
 } = userSlice.actions
 
 export default userSlice.reducer
